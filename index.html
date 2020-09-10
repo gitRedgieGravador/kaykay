@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="sweetalert2.all.min.js"></script>
+    <!-- Optional: include a polyfill for ES6 Promises for IE11 -->
+    <script src="https://cdn.jsdelivr.net/npm/promise-polyfill"></script>
+</head>
+<style>
+    .container {
+        display: grid;
+        grid-template-columns: auto auto auto;
+        grid-gap: 10px;
+        background: linear-gradient(to bottom, #669999 0%, #999966 100%);
+        padding: 10px;
+    }
+
+    .centered {
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        display: flex;
+        height: 90vh;
+    }
+
+    .bordered {
+        border: black 1px solid;
+    }
+
+    .box {
+        height: 100px;
+        width: 100px;
+        background: white;
+    }
+
+    .box:hover {
+        cursor: pointer;
+    }
+</style>
+
+<body>
+    <div class="centered">
+        <div class="container">
+            <div class="bordered box" id="1"></div>
+            <div class="bordered box" id="2"></div>
+            <div class="bordered box" id="3"></div>
+            <div class="bordered box" id="4"></div>
+            <div class="bordered box" id="5"></div>
+            <div class="bordered box" id="6"></div>
+            <div class="bordered box" id="7"></div>
+            <div class="bordered box" id="8"></div>
+            <div class="bordered box" id="9"></div>
+        </div>
+
+    </div>
+    <script>
+        console.log("hello")
+        const divs = document.querySelectorAll('.box');
+        var counter = 0;
+        var player1 = "X"
+        var player2 = "O"
+        var player1Boxes = []
+        var player2Boxes = []
+        var gameover = false
+
+        var winCombi = ["123", "456", "789", "159", "753", "741", "852", "963"]
+        function reset() {
+            player1Boxes = []
+            player2Boxes = []
+            gameover = false
+            counter = 0
+            divs.forEach(el => el.innerHTML = "")
+        }
+        divs.forEach(el => el.addEventListener('click', event => {
+            if (!gameover) {
+                let boxClicked = event.target.getAttribute('id');
+                if (counter % 2 == 0) {
+                    event.target.innerHTML = "X"
+                    player1Boxes.push(boxClicked)
+                } else {
+                    event.target.innerHTML = "O"
+                    player2Boxes.push(boxClicked)
+                }
+                counter++
+                for (let i in winCombi) {
+                    if (player1Boxes.includes(winCombi[i].split("")[0])
+                        && player1Boxes.includes(winCombi[i].split("")[1])
+                        && player1Boxes.includes(winCombi[i].split("")[2])) {
+                        gameover = true
+                        swal({
+                            title: "Great Job",
+                            text: "Player 1 won!",
+                            icon: "success",
+                            button: "Aww yiss!",
+                        }).then(val => {
+                            reset()
+                        })
+                    } else if (player2Boxes.includes(winCombi[i].split("")[0])
+                        && player2Boxes.includes(winCombi[i].split("")[1])
+                        && player2Boxes.includes(winCombi[i].split("")[2])) {
+                        console.log("p2 win")
+                        gameover = true
+                        swal({
+                            title: "Great Job",
+                            text: "Player 2 won!",
+                            icon: "success",
+                            button: "Aww yiss!",
+                        }).then(val => {
+                            reset()
+                        })
+                    }
+                }
+            }
+            if (counter >= 9) {
+                gameover = true
+                swal({
+                    title: "Tough Play",
+                    text: "The game is tied!",
+                    icon: "info",
+                    button: "Aww yiss!",
+                }).then(val => {
+                    reset()
+                })
+            }
+        }));
+    </script>
+</body>
+
+</html>
