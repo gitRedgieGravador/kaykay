@@ -15,9 +15,10 @@
     .container {
         display: grid;
         grid-template-columns: auto auto auto;
-        grid-gap: 10px;
-        background: linear-gradient(to bottom, #669999 0%, #999966 100%);
-        padding: 10px;
+        grid-gap: 5px;
+        background: black;
+        /* background: linear-gradient(to bottom, #669999 0%, white 100%); */
+        padding: 5px;
     }
 
     .centered {
@@ -41,10 +42,20 @@
     .box:hover {
         cursor: pointer;
     }
+
+    #red-turn {
+        color: red;
+    }
+
+    #black-turn {
+        color: black;
+    }
 </style>
 
-<body>
+<body onload="toggleTurn('none','block')">
     <div class="centered">
+        <h2 id="black-turn">Black's turn</h2>
+        <h2 id="red-turn">Red's turn</h2>
         <div class="container">
             <div class="bordered box" id="1"></div>
             <div class="bordered box" id="2"></div>
@@ -75,16 +86,33 @@
             gameover = false
             counter = 0
             divs.forEach(el => el.innerHTML = "")
+            toggleTurn('none','block')
+        }
+        function toggleTurn(red, black) {
+            let redstyle = document.getElementById("red-turn")
+            redstyle.style.display = red
+            let blackstyle = document.getElementById("black-turn")
+            blackstyle.style.display = black
         }
         divs.forEach(el => el.addEventListener('click', event => {
             if (!gameover) {
                 let boxClicked = event.target.getAttribute('id');
                 if (counter % 2 == 0) {
-                    event.target.innerHTML = "X"
+                    var x_img = document.createElement("img")
+                    x_img.setAttribute("src", "x.png");
+                    x_img.setAttribute("width", "100");
+                    x_img.setAttribute("height", "100");
+                    event.target.appendChild(x_img)
                     player1Boxes.push(boxClicked)
+                    toggleTurn('block', 'none')
                 } else {
-                    event.target.innerHTML = "O"
+                    var o_img = document.createElement("img")
+                    o_img.setAttribute("src", "o.png");
+                    o_img.setAttribute("width", "100");
+                    o_img.setAttribute("height", "100");
+                    event.target.appendChild(o_img)
                     player2Boxes.push(boxClicked)
+                    toggleTurn('none', 'block')
                 }
                 counter++
                 for (let i in winCombi) {
